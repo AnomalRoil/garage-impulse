@@ -356,6 +356,7 @@ details.log summary { cursor: pointer; font-size: 13px; font-weight: 500; color:
   const CH_DATA = "5f6d4f53-5f52-5043-5f64-6174615f5f5f";
   const CH_TX = "5f6d4f53-5f52-5043-5f74-785f63746c5f";
   const CH_RX = "5f6d4f53-5f52-5043-5f72-785f63746c5f";
+  const IOS = /iphone|ipad|ipod/i.test(navigator.userAgent) || (/macintosh/i.test(navigator.userAgent) && navigator.maxTouchPoints > 1);
   const HOLD_MS = 650;
 
   const $ = (id) => document.getElementById(id);
@@ -635,7 +636,8 @@ details.log summary { cursor: pointer; font-size: 13px; font-weight: 500; color:
   }
 
   async function chooseDevice(showAll) {
-    const opts = showAll
+    // Bluefy on iOS misses the Shelly with filters, so list every device there.
+    const opts = showAll || IOS
       ? { acceptAllDevices: true, optionalServices: [SVC] }
       : { filters: [{ services: [SVC] }, { namePrefix: "Shelly" }, { namePrefix: "shelly" }], optionalServices: [SVC] };
     const d = await navigator.bluetooth.requestDevice(opts);
@@ -931,10 +933,9 @@ details.log summary { cursor: pointer; font-size: 13px; font-weight: 500; color:
       installBtn.hidden = false;
       installLater.textContent = "Not now";
     } else {
-      const ua = navigator.userAgent;
-      installText.textContent = /android/i.test(ua)
+      installText.textContent = /android/i.test(navigator.userAgent)
         ? "In Chrome, open the ⋮ menu and choose Add to Home screen."
-        : /iphone|ipad|ipod/i.test(ua) || (/macintosh/i.test(ua) && navigator.maxTouchPoints > 1)
+        : IOS
           ? "Tap the Share button, then Add to Home Screen."
           : "Use your browser's menu to add this page to your home screen.";
       installBtn.hidden = true;
