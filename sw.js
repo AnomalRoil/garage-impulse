@@ -1,5 +1,5 @@
 // Bump VERSION on every deploy so phones pick up the new page.
-const VERSION = "v1";
+const VERSION = "v2";
 const CACHE = "garage-" + VERSION;
 const SHELL = ["./", "index.html", "manifest.webmanifest", "icon-192.png", "icon-512.png", "icon-maskable-512.png", "apple-touch-icon.png"];
 
